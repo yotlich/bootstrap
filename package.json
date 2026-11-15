@@ -1,0 +1,75 @@
+{
+  "name": "@yotlich/docs-devtools",
+  "version": "0.1.0",
+  "description": "Devtools for documentation monorepository",
+  "private": true,
+  "engines": {
+    "node": ">=22.22.1"
+  },
+  "scripts": {
+    "prepare": "simple-git-hooks",
+    "check": "npm run format:check && npm run lint:md:check && npm run spell:check",
+    "format": "prettier --write --ignore-unknown",
+    "format:check": "prettier --check .",
+    "format:fix": "npm run format -- .",
+    "lint:md": "markdownlint-cli2 --config package.json --configPointer /markdownlint-cli2",
+    "lint:md:check": "npm run lint:md",
+    "lint:md:fix": "npm run lint:md -- --fix",
+    "spell": "cspell --no-progress --no-cache",
+    "spell:check": "npm run spell"
+  },
+  "devDependencies": {
+    "simple-git-hooks": "2.14.0",
+    "lint-staged": "17.6.0",
+    "prettier": "3.10.1",
+    "markdownlint-cli2": "0.24.1",
+    "cspell": "10.5.1"
+  },
+  "allowScripts": {
+    "simple-git-hooks@2.14.0": true
+  },
+  "simple-git-hooks": {
+    "pre-commit": "./node_modules/.bin/lint-staged"
+  },
+  "lint-staged": {
+    "*.md": [
+      "npm run lint:md -- --fix --no-globs",
+      "npm run spell"
+    ],
+    "*": "npm run format"
+  },
+  "prettier": {
+    "proseWrap": "never",
+    "tabWidth": 2
+  },
+  "markdownlint-cli2": {
+    "globs": [
+      "**/*.md",
+      "!node_modules/**",
+      "!.git/**"
+    ],
+    "config": {
+      "MD013": false
+    }
+  },
+  "cspell": {
+    "language": "en",
+    "files": [
+      "**/*.md"
+    ],
+    "ignorePaths": [
+      "node_modules/**",
+      ".git/**"
+    ],
+    "ignoreRegExpList": [
+      "/```[\\s\\S]*?```/g",
+      "/`[^`\\n]+`/g",
+      "/https?:\\/\\/[^\\s)`]+/g"
+    ],
+    "words": [
+      "yotlich",
+      "monorepository",
+      "devtools"
+    ]
+  }
+}
